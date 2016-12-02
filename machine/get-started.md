@@ -279,8 +279,19 @@ For machines other than `default`, and commands other than those listed above, y
 
 In order to ensure that the Docker client is automatically configured at the
 start of each shell session, some users like to embed `eval $(docker-machine env
-default)` in their shell profiles (e.g., the `~/.bash_profile` file). However,
-this fails if the `default` machine is not running. If desired, you can
+default)` in their shell profiles (e.g., the `~/.bash_profile` file).
+```
+OUTPUT="$(docker-machine status)"
+
+if [ "${OUTPUT}" == "Running" ]; then
+    eval $(docker-machine env default)
+else
+    docker-machine start default
+    eval $(docker-machine env default)
+fi
+```
+
+Alternatively, you can
 configure your system to start the `default` machine automatically.
 
 Here is an example of how to configure this on macOS.
